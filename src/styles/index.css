@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #FBF8F2;
+  --color-linen: #F1ECE0;
+  --color-line: #E3DCCB;
+  --color-ink: #14161F;
+  --color-muted: #5C6070;
+  --color-accent: #2742E6;
+  --color-accent-2: #FF6B4A;
+  --color-highlight: #FFD84D;
+  --color-layer-design: #FF6B4A;
+  --color-layer-interface: #2742E6;
+  --color-layer-logic: #8FB4FF;
+  --color-layer-data: #18206B;
+  /* Redesign tokens: dark sections and the icy accent used on them. Layer colours above never change. */
+  --color-navy: #0B1230;
+  --color-night: #070A18;
+  --color-cyan: #5CE1FF;
+
+  --font-display: "Bricolage Grotesque Variable", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Schibsted Grotesk Variable", "Helvetica Neue", Arial, sans-serif;
+
+  --text-display: clamp(3.5rem, 9vw, 8rem);
+  --text-h2: clamp(2.25rem, 5vw, 4.5rem);
+}
+
+@layer base {
+  html { background: var(--color-cream); }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  body { font-family: var(--font-sans); color: var(--color-ink); font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--font-display); line-height: 1.04; letter-spacing: -0.035em; font-optical-sizing: auto; }
+  :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: 4px; }
+  ::selection { background: var(--color-highlight); color: var(--color-ink); }
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* One looping cue only: the hero's scroll hint. It fades out once the page moves. */
+@keyframes scroll-cue {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.scroll-cue { animation: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+@media (prefers-reduced-motion: reduce) { .scroll-cue { animation: none; transform: scaleY(1); } }
+
+/* Work cards: a slow ribbon of the project's technologies. Pauses on hover. */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 22s linear infinite; }
+.group:hover .marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+/* Virtual Trial Room drawing: the scan sweeps top to bottom, the garment cycles through colours. */
+@keyframes scan { from { top: 8%; } to { top: 92%; } }
+.scan-line { animation: scan 2.6s ease-in-out infinite alternate; }
+@keyframes shirt-fill {
+  0%, 20% { fill: #FF6B4A; }
+  25%, 45% { fill: #FFD84D; }
+  50%, 70% { fill: #8FB4FF; }
+  75%, 95% { fill: #2742E6; }
+  100% { fill: #FF6B4A; }
+}
+.shirt-fill { animation: shirt-fill 9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .scan-line, .shirt-fill { animation: none; } }
+
+/* Work deck: from tablet size up (and when the screen is tall enough), cards pin and stack as you scroll. */
+@media (min-width: 768px) and (min-height: 720px) { .deck-card { position: sticky; } }
